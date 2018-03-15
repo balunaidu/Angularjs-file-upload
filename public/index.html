@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>File upload</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="./angular.min.js"></script>
+</head>
+<body>
+	<div ng-app="myapp" ng-controller="myCtrl">
+		<input type="file" ng-model="file" ng-blur="files($event)">
+	</div>
+	<script type="text/javascript">
+		var app = angular.module('myapp' , []);
+		app.controller('myCtrl' , function($scope, $http){
+			$scope.files = function(ev){
+				console.log(ev.target.files[0])
+				$scope.file = ev.target.files[0];
+				var fd = new FormData();
+				fd.append('file', $scope.file)
+				var request = {
+                    method: 'POST',
+                    url: '/photos/upload',
+                    data: fd,
+                    headers: {
+                        'Content-Type': undefined
+                    }
+                };
+				$http(request).then(function(res){
+					console.log(res)
+				})
+			}
+		})
+	</script>
+</body>
+</html>
